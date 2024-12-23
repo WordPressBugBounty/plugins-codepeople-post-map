@@ -121,11 +121,14 @@
 		if(typeof google != 'undefined' && google.maps){
 			cpm_get_latlng();
 		}else{
-			$('<script type="text/javascript" src="'+(( typeof window.location.protocol != 'undefined' ) ? window.location.protocol : 'http:' )+'//maps.google.com/maps/api/js?'+_api_key+'callback=cpm_get_latlng'+((language) ? '&language='+language: '')+'"></script>').appendTo('body');
+			$('<script type="text/javascript" src="'+(( typeof window.location.protocol != 'undefined' ) ? window.location.protocol : 'http:' )+'//maps.google.com/maps/api/js?loading=async&'+_api_key+'callback=cpm_get_latlng'+((language) ? '&language='+language: '')+'&libraries=marker"></script>').appendTo('body');
 		}
 	};
 
 	window['cpm_load_map'] = function(container, latitude, longitude){
+		var icon_img = document.createElement("img");
+			icon_img.src = cpm_default_marker.replace(/^http:/i, '');
+
 		var c = container,
 			f = c.parents('.point_form'),
 			p = new google.maps.LatLng(latitude, longitude),
@@ -139,12 +142,14 @@
 								scaleControl: true,
 								zoomControl: true,
 								mapTypeControl: true,
-								scrollWheel: true
+								scrollWheel: true,
+
+								mapId: 'cpm_main_map'
 						}),
-			mk = new google.maps.Marker({
+			mk = new google.maps.marker.AdvancedMarkerElement({
 							  position: p,
 							  map: m,
-							  icon: new google.maps.MarkerImage(cpm_default_marker),
+							  content: icon_img,
 							  draggable: true
 						 });
 
@@ -240,7 +245,7 @@
             }
             else
             {
-                $('<script type="text/javascript" src="'+(( typeof window.location.protocol != 'undefined' ) ? window.location.protocol : 'http:' )+'//maps.google.com/maps/api/js?'+_api_key+'sensor=false&callback=cpm_set_map_flag"></script>').appendTo('body');
+                $('<script type="text/javascript" src="'+(( typeof window.location.protocol != 'undefined' ) ? window.location.protocol : 'http:' )+'//maps.google.com/maps/api/js?loading=async&'+_api_key+'callback=cpm_set_map_flag&libraries=marker"></script>').appendTo('body');
             }
 		}
 

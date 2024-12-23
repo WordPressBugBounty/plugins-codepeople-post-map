@@ -96,16 +96,17 @@ function CodePeoplePostMapPublic()
 				this.uniqueMarkers = [];
 				for( var i = 0, h = l.length; i < h; i++ )
 				{
-					if( typeof this.uniqueMarkers[ l[ i ].position.toString() ] == 'undefined' )
+					let index = JSON.stringify(l[ i ].position);
+					if( typeof this.uniqueMarkers[ index ] == 'undefined' )
 					{
-						this.uniqueMarkers[ l[ i ].position.toString() ] = [];
+						this.uniqueMarkers[ index ] = [];
 						rtn.push( l[ i ] );
 					}
 					else
 					{
 						l[ i ].visible = false;
 					}
-					this.uniqueMarkers[ l[ i ].position.toString() ].push( l[ i ] );
+					this.uniqueMarkers[ index ].push( l[ i ] );
 				}
 
 				return rtn;
@@ -134,7 +135,8 @@ function CodePeoplePostMapPublic()
 							mapTypeControl: me.data.typecontrol,
 							streetViewControl: me.data.streetviewcontrol,
 							fullscreenControl: me.data.fullscreencontrol,
-							backgroundColor: 'none'
+							backgroundColor: 'none',
+							mapId: me.id
 					});
 
 					var map = me.map,
@@ -170,10 +172,12 @@ function CodePeoplePostMapPublic()
 							else if(/address/i.test(me['data']['marker_title']))
 								title = (m[i].address) ? me._str_transform(m[i].address) : '';
 
-							var marker = new google.maps.Marker({
+							var icon_img = document.createElement("img");
+							icon_img.src = m[i].icon.replace(/^http:/i, '');
+							var marker = new google.maps.marker.AdvancedMarkerElement({
 														  position: m[i].latlng,
 														  map: map,
-														  icon: new google.maps.MarkerImage(m[i].icon.replace(/^http:/i, '')),
+														  content: icon_img,
 														  title:title
 														 });
 
@@ -264,7 +268,7 @@ function CodePeoplePostMapPublic()
 			open_infowindow : function(m){
 				var me = this,
 					info   = '',
-					unique = me.uniqueMarkers[ m.position.toString() ];
+					unique = me.uniqueMarkers[ JSON.stringify(m.position) ];
 
 				if ( !me.data.show_window ) return;
 
@@ -275,8 +279,8 @@ function CodePeoplePostMapPublic()
 				}
 
 				var c  = me._str_transform( info ),
-					img = $( c.replace( '%additional%', '' ) ).find( 'img' );
-
+					img = $( c ).find( 'img' );
+				c = c.replace( '%additional%', '' );
 				if( img.length )
 				{
 					var count = img.length;
@@ -383,7 +387,7 @@ function CodePeoplePostMapPublic()
 				// Create the script tag and load the maps api
 				var script=document.createElement('script');
 				script.type  = "text/javascript";
-				script.src=(( typeof window.location.protocol != 'undefined' ) ? window.location.protocol : 'http:' )+'//maps.google.com/maps/api/js?loading=async&'+((typeof cpm_api_key != 'undefined' && cpm_api_key != '')? 'key='+cpm_api_key+'&' :'')+'callback=cpm_init'+((typeof cpm_language != 'undefined' && cpm_language.lng) ? '&language='+cpm_language.lng: '');
+				script.src=(( typeof window.location.protocol != 'undefined' ) ? window.location.protocol : 'http:' )+'//maps.google.com/maps/api/js?loading=async&'+((typeof cpm_api_key != 'undefined' && cpm_api_key != '')? 'key='+cpm_api_key+'&' :'')+'callback=cpm_init'+((typeof cpm_language != 'undefined' && cpm_language.lng) ? '&language='+cpm_language.lng: '')+'&libraries=marker';
 				document.body.appendChild(script);
 			}else{
 				cpm_init();

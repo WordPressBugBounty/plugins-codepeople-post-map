@@ -2,7 +2,7 @@
 /*
 Plugin Name: Google Maps CP
 Text Domain: codepeople-post-map
-Version: 1.1.8
+Version: 1.2.0
 Author: CodePeople
 Author URI: http://wordpress.dwbooster.com/content-tools/codepeople-post-map
 Plugin URI: http://wordpress.dwbooster.com/content-tools/codepeople-post-map
@@ -16,6 +16,16 @@ new CP_FEEDBACK(plugin_basename( dirname(__FILE__) ), __FILE__, 'https://wordpre
 
 define('CPM_PLUGIN_DIR', WP_PLUGIN_DIR."/".dirname(plugin_basename(__FILE__)));
 define('CPM_PLUGIN_URL', plugins_url()."/".dirname(plugin_basename(__FILE__)));
+
+add_action( 'init', function(){
+	add_filter( 'get_post_metadata', function( $v, $object_id, $meta_key, $single, $meta_type ){
+		if ( '_elementor_element_cache' == $meta_key ) {
+			global $wpdb;
+			if ( $wpdb->get_var( $wpdb->prepare('SELECT COUNT(*) FROM ' . $wpdb->postmeta . ' WHERE post_id=%d AND meta_key="_elementor_element_cache" AND meta_value LIKE "%cpm_%";', $object_id ) ) ) return false;
+		}
+		return $v;
+	}, 10, 5 );
+} );
 
 require (CPM_PLUGIN_DIR.'/include/functions.php');
 add_filter('option_sbp_settings', array('CPM', 'troubleshoot'));

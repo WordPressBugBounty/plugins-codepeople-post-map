@@ -80,30 +80,15 @@ jQuery(function(){
 	);
 
 	// Autoupdate
-	var reloading_iframes;
 	function autoupdate()
 	{
-		var save_draft = jQuery('.editor-post-save-draft');
-		if(save_draft.length) save_draft.trigger('click');
-		else
-		{
-			var update_btn = jQuery('.editor-post-publish-button');
-			if(update_btn.length) update_btn.trigger('click');
-			else
-			{
-				try{ wp.heartbeat.connectNow(); } catch(err){}
-			}
-		}
-		if('number' === typeof reloading_iframes)
-		{
-			clearTimeout(reloading_iframes);
-			delete reloading_iframes;
-		}
-		reloading_iframes = setTimeout(function(){
+		const isSavingPost = wp.data.select('core/editor').isSavingPost();
+		if (isSavingPost) return;
+		wp.data.dispatch('core/editor').savePost({ waitForResponse: false }).then(()=>{
 			jQuery('.cpm-iframe-container iframe').each(function(){
 				this.contentWindow.location.reload();
 			});
-		}, 4000);
+		});
 	};
 
 	jQuery(document).on('change click', '#codepeople_post_map_form :input, [id*="cpm_point"]',

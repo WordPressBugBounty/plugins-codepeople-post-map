@@ -1,10 +1,10 @@
 === Google Maps CP ===
 Contributors: codepeople
 Donate link: http://wordpress.dwbooster.com/content-tools/codepeople-post-map
-Tags:google maps,maps,marker,gmap,places,shortcode,map,categories,post map,point,location,address,images,geocoder,google,shape,list,grouping,cluster,infowindow,route,pin,streetview,post,posts,pages,widget,image,exif tag,plugin,sidebar,stylize,admin
+Tags:google maps,maps,marker,places,shape,cluster
 Requires at least: 3.0.5
 Tested up to: 6.7
-Stable tag: trunk
+Stable tag: 1.2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -637,6 +637,12 @@ Now the most important part create the shape's area. To create the shape's area 
 
 == Changelog ==
 
+= 1.2.0 =
+
+* Introduces the new Marker and Cluster libraries.
+* Updates the Gutenberg block and metabox for enhanced functionality.
+* Enhances the plugin settings page for a better user experience.
+
 = 1.1.8 =
 
 * Allows configuring the points to display when WPML is installed on the website.
@@ -673,225 +679,3 @@ Now the most important part create the shape's area. To create the shape's area 
 
 * Improves the plugin interface.
 * Implements the WCML integration to display points from active language.
-
-= 1.0.44 =
-
-* Improves the plugin security.
-
-= 1.0.43 =
-
-* Modifies the Google Maps loading process to avoid conflicts with third-party themes.
-
-= 1.0.42 =
-
-* Modifies the plugin configuration making it easier to use.
-
-= 1.0.41 =
-
-* Fixes a conflict with third-party plugins.
-
-= 1.0.40 =
-
-* Implements the integration with Borlabs Cookie to block Google Maps until the cookies are accepted.
-
-= 1.0.39 =
-
-* Includes three new filters, cmp-point, cpm-point-infowindow-template, and cpm-point-infowindow, to edit the attributes of the point, modify the infowindows template, and edit the generated infowindows, respectively.
-
-= 1.0.38 =
-
-* Allows the use of shortcodes into the points' descriptions.
-
-= 1.0.37 =
-
-* Modifies the interaction with the Google APIs to prevent the limits on Google requests, affect our plugin.
-
-= 1.0.36 =
-
-* Modifies the plugin's settings.
-
-= 1.0.35 =
-
-* Includes a video tutorial in the plugin's interface to improve the users' experience.
-
-= 1.0.34 =
-
-* Includes new validation rules to prevent possible errors and warnings' messages, and removes unnecessary blocks of code.
-
-= 1.0.33 =
-
-* Fixes some notice messages.
-
-= 1.0.32 =
-
-* Modifies the Mouse Wheel behavior, to make it less intrusive.
-
-= 1.0.31 =
-
-* Fixes an encoding issue in some ampersand symbols on generated URLs.
-
-= 1.0.30 =
-
-* Assigns a class name to the points' thumbnails, to allow exclude them from the lazy loading of third party plugin that break the javascript blocks of code.
-
-= 1.0.29 =
-
-* Improves the detection of misconfigured Google Maps Projects.
-
-= 1.0.28 =
-
-* Includes some modifications in the infowindows styles.
-* Fixes an issue to determine the featured images associated to the posts.
-* Allows generating points from images when teh posts are published by email (Advanced and Developer versions of the plugin)
-
-= 1.0.27 =
-
-* Fixes an issue with the "cpm-complete-structured-query" filter.
-
-= 1.0.26 =
-
-* Includes new filters to allow the integration with third party plugins, or information stored in custom fields:
-
-cpm-complete-structured-query
-cpm-post-latitude
-cpm-post-longitude
-cpm-post-address
-cpm-point-image
-cpm-point-description
-cpm-point-address
-
-= 1.0.25 =
-
-* Modifies the access to the demos.
-
-= 1.0.24 =
-
-* Fixes an issue processing the maps settings.
-
-= 1.0.23 =
-
-* Improves the plugin performance and the maps generation.
-
-= 1.0.22 =
-
-* Modifies the blocks for the Gutenberg editor,  preparing the plugin for WordPress 5.1
-
-= 1.0.21 =
-
-* Modifies the integration with the Gutenberg editor, loading the maps directly in the editor.
-
-= 1.0.20 =
-
-* Implements the integration with the latest version of the Gutenberg editor.
-
-= 1.0.19 =
-
-* Solves a conflict with the "Speed Booster Pack" plugin.
-
-= 1.0.18 =
-
-* Modifies the integration with the Gutenberg editor to includes the new features of Gutenberg.
-
-= 1.0.17 =
-
-* Modifies the activation/deactivation process.
-* Solves an issue with the maps' sizes (width and height)
-
-= 1.0.16 =
-
-* Solves a conflict with the new styles of Google Maps.
-
-= 1.0.15 =
-
-* Modifies the instructions in the interface of the plugin.
-
-= 1.0.14 =
-
-* Fixes a javascript parser error when the user leave in blank the zoom attribute in the map's  settings.
-
-= 1.0.13 =
-
-* Fixes the issue in the plugin that clears the general settings when the updates are installed.
-
-= 1.0.12 =
-
-* Allows to select the information to display in the tooltips associated to the pins (the point location name, the address, or none).
-
-= 1.0.11 =
-
-* Fixes an issue processing the latitudes and longitudes.
-
-= 1.0.10 =
-
-* Removes the invalid characters from the points' latitudes and longitudes.
-
-= 1.0.9 =
-
-* Uses correct protocol in the markers' urls.
-
-= 1.0.8 =
-
-* Allows the integration with the Gutenberg Editor, the text editor that will be distributed with the next versions of WordPress.
-
-= 1.0.7 =
-
-* Replaces the maps' shortcodes into the WordPress "Text" widget.
-* Fixes an issue in the javascript code.
-
-= 1.0.6 =
-
-* Modifies the plugin to use the new controls of Google Maps like the fullscreen control.
-
-= 1.0.5 =
-
-* Checks if the get_post_meta does not unserialize the result, and applies the unserialize it if corresponds.
-
-= 1.0.4 =
-
-* Fixes a Cross Site Scripting vulnerability modifying the form's action, in the settings page of the plugin. Fortunately, this vulnerability can be exploded only by users with access to the settings page of the plugin that is restricted only to the website's administrators. The vulnerability was Discovered with DefenseCode WebScanner Security Analyzer by Neven Biruski.
-
-= 1.0.3 =
-
-* Includes a "Troubleshoot Section" in the settings page of the plugin to load the resources used by the plugin in the body or footer of webpage to prevent conflicts with other plugins.
-
-= 1.0.2 =
-
-* Allows to display a traffic layer over the map.
-* Fixes some errors.
-* Modifies the menu options to improve the access to the plugin documentation.
-
-= 1.0.1 =
-
-* Allows to get the latitude and longitude of points from the point definition
-* Corrects some conflicts with styles defined in some themes that interfere  with the Google Maps styles.
-* Allows display the maps, in themes that use AJAX to load the posts and pages.
-* Corrects some issues related with the update in the version of jQuery Framework, and force the inclusion of jQuery if it is not loaded by the website.
-* Improves the plugin interface to allow modify the maps settings easily.
-* Allows controlling the maps settings directly through attributes in the shortcode.
-* Corrects an issue with the insertion of maps with a responsive design.
-* Allows insert links in the points description.
-* Include online demos.
-* Change the icons URL to preserve the references with domain changes.
-* Allows display and hide map when is inserted like an icon in page.
-* Allows the selection of point images as thumbnail to optimize the page load.
-* Changes the HTML generated to meet the W3C validation
-* Include the use of nonce fields to protect the maps settings form.
-* The Google Api is loaded with the same schema of webpage, and use https if it is required.
-
-= 1.0 =
-
-* Insert a Google Map in template files page with multiple entries.
-* Improves of meta-boxes calling.
-* Correct some bugs in Internet Explorer 8.
-* Integrate the Google Map with non-standard WordPress themes.
-* Allows the use of language files in the plugin
-* Allows set an icon by default in the points of map.
-* Uses Google Maps to discover additional entries related to the post
-* The location can be defined by physical address and point coordinates
-* Allows the map markers customization
-* Allows to embed Google Maps in multiple languages
-* Allows several Google Maps controls and configuration options
-
-= 0.9b =
-
-* First stable version released
