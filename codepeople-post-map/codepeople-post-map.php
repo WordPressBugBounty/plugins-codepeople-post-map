@@ -2,7 +2,7 @@
 /*
 Plugin Name: Google Maps CP
 Text Domain: codepeople-post-map
-Version: 1.2.1
+Version: 1.2.2
 Author: CodePeople
 Author URI: http://wordpress.dwbooster.com/content-tools/codepeople-post-map
 Plugin URI: http://wordpress.dwbooster.com/content-tools/codepeople-post-map
@@ -146,7 +146,7 @@ if (!function_exists("cpm_settings")) {
 				$slug = basename(__FILE__);
 				add_options_page('Google Maps CP', 'Google Maps CP', 'manage_options', $slug, array(&$cpm_master_obj, 'settings_page'));
 
-				add_menu_page( 'Google Maps CP', 'Google Maps CP', 'manage_options', $slug, array(&$cpm_master_obj, 'settings_page'));
+				add_menu_page( 'Google Maps CP', 'Google Maps CP', 'manage_options', $slug, array(&$cpm_master_obj, 'settings_page'), 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiBmaWxsPSJjdXJyZW50Q29sb3IiPg0KICA8cGF0aCBkPSJNMTIgMmMzLjE5NiAwIDYgMi42MTggNiA1LjYwMiAwIDMuMDkzLTIuNDkzIDcuMTMyLTYgMTIuNTkxLTMuNTA3LTUuNDU5LTYtOS40OTgtNi0xMi41OTFDNiA0LjYxOCA4LjgwNCAyIDEyIDJ6bTAgNGEyIDIgMCAxIDAgMCA0IDIgMiAwIDAgMCAwLTR6Ii8+DQo8L3N2Zz4=' );
 
 				add_submenu_page( $slug, 'Online Help', 'Online Help', 'read', 'google_maps_cp_help', array(&$cpm_master_obj, 'settings_page') );
 
