@@ -219,7 +219,7 @@
 
 		window[ 'cpm_generate_shortcode' ] = function()
 		{
-			return '[codepeople-post-map]';
+			return '[codepeople-post-map mapid=""]';
 		};
 
 		// Action for insert shortcode

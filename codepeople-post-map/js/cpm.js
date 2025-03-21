@@ -16,9 +16,10 @@ function CodePeoplePostMapPublic()
 	}
 	jQuery(function( $ ){
 		// Create a class with CodePeople Post Map functionalities and attributes
-		$.CPM = function(id, config){
+		$.CPM = function(id, config, cloud_id){
 			this.data = $.extend(true, {}, this.defaults, config);
 			this.id = id;
+			this.cloud_id = cloud_id;
 			this.markers = [];
 			this.uniqueMarkers = [];
 			if( typeof this.data[ 'center' ] == 'object' && typeof this.data.center.length != 'undefined' && this.data.center.length == 2 )
@@ -136,7 +137,7 @@ function CodePeoplePostMapPublic()
 							streetViewControl: me.data.streetviewcontrol,
 							fullscreenControl: me.data.fullscreencontrol,
 							backgroundColor: 'none',
-							mapId: me.id
+							mapId: me.cloud_id
 					});
 
 					var map = me.map,
@@ -327,7 +328,10 @@ function CodePeoplePostMapPublic()
 		function initialize( e )
 		{
 			var map_container = $( e ),
-				map_id = map_container.attr('id');
+				map_id = map_container.attr('id'),
+				cloud_id = map_container.attr('data-mapid');
+
+			if ( typeof cloud_id == 'undefined' || '' == cloud_id ) cloud_id = map_id;
 
 			if( map_container.parent().is( ':hidden' ) )
 			{
@@ -337,7 +341,7 @@ function CodePeoplePostMapPublic()
 
 			if(cpm_global && cpm_global[map_id] && cpm_global[map_id]['markers'].length){
 				// The maps data are defined
-				var cpm = new $.CPM(map_id, cpm_global[map_id]);
+				var cpm = new $.CPM(map_id, cpm_global[map_id], cloud_id );
 
 				// Display map
 				if(cpm_global[map_id]['display'] == 'map'){

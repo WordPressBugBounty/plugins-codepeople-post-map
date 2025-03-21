@@ -607,24 +607,60 @@ class CPM {
 				<td><input type="text" name="cpm_map[points]" id="cpm_map_points" value="<?php esc_attr_e((isset($options['points'])) ? $options['points'] : '');?>" /></td>
 			</tr>
 			<tr class="cpm-map-settings" style="<?php print $additional_tr_styles; ?>">
-				<th scope="row"><label for="cpm_map_stylized" style="color:#CCCCCC;"><?php _e('Allow stylize the maps:', 'codepeople-post-map'); ?></label></th>
-				<td valign="top">
-					<input type="checkbox" DISABLED />
+				<th scope="row"><label><?php _e('Allow stylize the maps:', 'codepeople-post-map')?></label></th>
+				<td valign="top" style="border:1px solid #CCC; padding: 20px;">
+					<p><?php
+					esc_html_e( "Map styling has changed in the latest Google Maps APIs. You must now do this through the Google Cloud Console.", 'codepeople-post-map' ); ?></p>
+					<p><?php
+					esc_html_e( "Creating custom Google Maps styles and associating them with Map IDs allows you to tailor your maps to your website's aesthetic and functionality. Here's a step-by-step guide:", 'codepeople-post-map' ); ?></p>
+					<ol>
+					  <li>
+						<strong><?php esc_html_e( 'Create a Map ID:', 'codepeople-post-map' ); ?></strong>
+						<ul style="list-style:disc;margin-left:20px;">
+						  <li><?php esc_html_e( 'Access the ', 'codepeople-post-map' ); ?><a href="https://console.cloud.google.com/" target="_blank">Google Cloud Console</a>.</li>
+						  <li><?php esc_html_e( 'Navigate to', 'codepeople-post-map' ); ?> <strong>"Map Management"</strong> <?php esc_html_e( 'within the Google Maps Platform.', 'codepeople-post-map' ); ?></li>
+						  <li><?php esc_html_e( 'Click', 'codepeople-post-map' ); ?> <strong>"Create Map ID,"</strong> <?php esc_html_e( 'provide a name, select the map type', 'codepeople-post-map' ); ?> (<strong>JavaScript</strong>), <?php esc_html_e( 'and create.', 'codepeople-post-map' ); ?></li>
+						  <li><?php esc_html_e( 'Note your generated Map ID.', 'codepeople-post-map' ); ?></li>
+						</ul>
+					  </li>
+					  <li>
+						<strong><?php esc_html_e( 'Create a Map Style:', 'codepeople-post-map' ); ?></strong>
+						<ul style="list-style:disc;margin-left:20px;">
+						  <li><?php esc_html_e( 'Go to', 'codepeople-post-map' ); ?> <strong>"Map Styles"</strong> <?php esc_html_e( 'in the Google Maps Platform.', 'codepeople-post-map' ); ?></li>
+						  <li><?php esc_html_e( 'Click', 'codepeople-post-map' ); ?> <strong>"Create style."</strong></li>
+						  <li>
+							<?php esc_html_e( 'Customize visually or using JSON:', 'codepeople-post-map' ); ?>
+							<ul style="list-style:circle;margin-left:20px;">
+							  <li><strong><?php esc_html_e( 'Visual Customization:', 'codepeople-post-map' ); ?></strong> <?php esc_html_e( 'Use the editor tools to modify features and colors.', 'codepeople-post-map' ); ?></li>
+							  <li><strong><?php esc_html_e( 'JSON Customization:', 'codepeople-post-map' ); ?></strong> <?php esc_html_e( 'Paste your JSON styling code into the editor.', 'codepeople-post-map' ); ?></li>
+							  <li><?php esc_html_e( 'Refine in the visual editor after importing JSON, if desired.', 'codepeople-post-map' ); ?></li>
+							</ul>
+						  </li>
+						  <li><?php esc_html_e( 'Name and publish your style.', 'codepeople-post-map' ); ?></li>
+						</ul>
+					  </li>
+					  <li>
+						<strong><?php esc_html_e( 'Associate the Map Style with the Map ID (via Map Management):', 'codepeople-post-map' ); ?></strong>
+						<ul style="list-style:disc;margin-left:20px;">
+						  <li><?php esc_html_e( 'Navigate to', 'codepeople-post-map' );?> <strong>"Map Management"</strong> <?php esc_html_e( 'within the Google Maps Platform.', 'codepeople-post-map' ); ?></li>
+						  <li><?php esc_html_e( 'Select the Map ID from the list by clicking its name.', 'codepeople-post-map' ); ?></li>
+						  <li><?php esc_html_e( 'In the Map ID details, locate the', 'codepeople-post-map' ); ?> <strong>"Style"</strong> <?php esc_html_e( 'or', 'codepeople-post-map' ); ?> <strong>"Associated Style"</strong> <?php esc_html_e( 'section and click', 'codepeople-post-map' ); ?> <strong>"Edit."</strong></li>
+						  <li><?php esc_html_e( 'Choose your desired map style from the dropdown or list.', 'codepeople-post-map' ); ?></li>
+						  <li><?php esc_html_e( 'Save the changes.', 'codepeople-post-map' ); ?></li>
+						</ul>
+					  </li>
+					  <li>
+						<strong><?php esc_html_e( 'Using it in your website:', 'codepeople-post-map' ); ?></strong>
+						<ul style="list-style:disc;margin-left:20px;">
+						  <li><?php esc_html_e( 'Pass the', 'codepeople-post-map' ); ?> <strong>"Map ID"</strong> <?php esc_html_e( 'through the map shortcode:', 'codepeople-post-map' ); ?>
+						  <p><strong style="font-size:1.3em;">[codepeople-post-map mapid="1234567890"]</strong></p>
+						  </li>
+						</ul>
+					  </li>
+					</ol>
 				</td>
 			</tr>
 			<tr class="cpm-map-settings" style="<?php print $additional_tr_styles; ?>">
-				<th></th>
-				<td>
-					<span>
-					<?php
-						_e( "If you want change the maps' styles, be sure to know how to create a JSON structure with the map's styles", 'codepeople-post-map');
-					?>
-					</span><br />
-					<textarea rows="10" cols="80" DISABLED READONLY ></textarea><br />
-					 <span style="color:#FF0000;">This feature is available only in commercial version of plugin. <a href="http://wordpress.dwbooster.com/content-tools/codepeople-post-map#download">Click Here</a></span>
-				</td>
-			</tr>
-            <tr class="cpm-map-settings" style="<?php print $additional_tr_styles; ?>">
 				<th scope="row"><label for="cpm_map_legend" style="color:#CCCCCC;"><?php _e("Display the map's legend:", 'codepeople-post-map');?></label></th>
 				<td valign="top">
 					<input type="checkbox" disabled readonly /> <span style="color:#FF0000;">This feature is available only in commercial version of plugin. <a href="http://wordpress.dwbooster.com/content-tools/codepeople-post-map#download">Click Here</a></span>
@@ -1210,6 +1246,8 @@ class CPM {
             $cpm_map = $cpm_obj->get_configuration_option();
         }
 
+		if( ! empty($atts['mapid']) ) $cpm_map['mapid'] = trim( $atts['mapid'] );
+
         if(!empty($cpm_map['points'])){
             $cpm_obj->limit = $cpm_map['points'];
         }
@@ -1404,7 +1442,7 @@ class CPM {
 		}
 		else $height = '500px';
 
-		$output ='<div id="'.$this->map_id.'" class="cpm-map" style="display:none; width:'.esc_attr($width).'; height:'.esc_attr($height).'; ';
+		$output ='<div id="'.$this->map_id.'" data-mapid="' . esc_attr( ! empty( $atts['mapid'] ) ? $atts['mapid'] : '' ). '" class="cpm-map" style="display:none; width:'.esc_attr($width).'; height:'.esc_attr($height).'; ';
 
 		if(!isset($align)) $align = 'center';
 		if(!isset($margin)) $margin = 0;
