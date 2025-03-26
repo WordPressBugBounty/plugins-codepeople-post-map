@@ -3,8 +3,8 @@ Contributors: codepeople
 Donate link: http://wordpress.dwbooster.com/content-tools/codepeople-post-map
 Tags:google maps,maps,marker,places,shape,cluster
 Requires at least: 3.0.5
-Tested up to: 6.7
-Stable tag: 1.2.3
+Tested up to: 6.8
+Stable tag: 1.2.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -613,6 +613,10 @@ Now the most important part create the shape's area. To create the shape's area 
 11. Export/Import section (only available in the Developer version of the plugin)
 
 == Changelog ==
+
+= 1.2.4 =
+
+* Ensures full compatibility with WordPress 6.8.
 
 = 1.2.3 =
 

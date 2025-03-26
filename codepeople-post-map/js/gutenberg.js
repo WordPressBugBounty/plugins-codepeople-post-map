@@ -55,8 +55,8 @@ jQuery(function(){
 						}
 					),
 					el(
-						'div', {className: 'cpm-iframe-container', key: 'cpm_iframe_container'},
-						el('div', {className: 'cpm-iframe-overlay', key: 'cpm_iframe_overlay'}),
+						'div', {className: 'cpm-iframe-container', key: 'cpm_iframe_container', style:{position:'relative'}},
+						el('div', {className: 'cpm-iframe-overlay', key: 'cpm_iframe_overlay', style:{position:'absolute',top:0,right:0,bottom:0,left:0}}),
 						el('iframe',
 							{
 								key: 'cpm_store_iframe',
