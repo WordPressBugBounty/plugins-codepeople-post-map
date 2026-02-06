@@ -312,7 +312,7 @@ class CPM {
 		<h1><?php _e('Maps Configuration', 'codepeople-post-map'); ?></h1>
 		<p  style="border:1px solid #E6DB55;margin-bottom:10px;padding:5px;background-color: #FFFFE0;">
 		<?php _e('For any issues with the map, go to our <a href="http://wordpress.dwbooster.com/contact-us" target="_blank">contact page</a> and leave us a message.', 'codepeople-post-map'); ?><br/><br />
-		<?php _e('To test the premium version of CP Google Maps, please, go to the following links:<br/> <a href="https://demos.dwbooster.com/cp-google-maps/wp-login.php" target="_blank">Administration area: Click to access the administration area demo</a><br/> <a href="https://demos.dwbooster.com/cp-google-maps/" target="_blank">Public page: Click to access the CP Google Maps</a>', 'codepeople-post-map' ); ?>
+		<?php _e('To test the premium version of CodePeople Post Map for Google Maps, please, go to the following links:<br/> <a href="https://demos.dwbooster.com/cp-google-maps/wp-login.php" target="_blank">Administration area: Click to access the administration area demo</a><br/> <a href="https://demos.dwbooster.com/cp-google-maps/" target="_blank">Public page: Click to access the CodePeople Post Map for Google Maps</a>', 'codepeople-post-map' ); ?>
 		</p>
 		<?php
 		if(!$single)

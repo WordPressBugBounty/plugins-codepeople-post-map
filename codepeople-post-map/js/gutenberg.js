@@ -10,14 +10,14 @@ jQuery(function(){
 		});
 
 		/* Plugin Category */
-		blocks.getCategories().push({slug: 'cpgm', title: 'CP Google Maps'});
+		blocks.getCategories().push({slug: 'cpgm', title: 'CodePeople Post Map for Google Maps'});
 
 		/* ICONS */
 		const iconCPGM = el('img', { width: 20, height: 20, src:  "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIGZpbGw9ImN1cnJlbnRDb2xvciIgY2xhc3M9Imljb24gaWNvbi10YWJsZXIgaWNvbnMtdGFibGVyLWZpbGxlZCBpY29uLXRhYmxlci1tYXAtcGluIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxwYXRoIGQ9Ik0wIDBoMjR2MjRIMHoiIGZpbGw9Im5vbmUiLz48cGF0aCBkPSJNMTguMzY0IDQuNjM2YTkgOSAwIDAgMSAuMjAzIDEyLjUxOWwtLjIwMy4yMS00LjI0MyA0LjI0MmEzIDMgMCAwIDEtNC4wOTcuMTM1bC0uMTQ0LS4xMzUtNC4yNDQtNC4yNDNBOSA5IDAgMCAxIDE4LjM2NCA0LjYzNnpNMTIgOGEzIDMgMCAxIDAgMCA2IDMgMyAwIDAgMCAwLTZ6IiBzdHlsZT0iZmlsbDojZmYyYTJhO2ZpbGwtb3BhY2l0eToxO3N0cm9rZTojMDAwO3N0cm9rZS1vcGFjaXR5OjEiLz48L3N2Zz4=" } );
 
-		/* CP Google Maps Code */
+		/* CodePeople Post Map for Google Maps Code */
 		blocks.registerBlockType( 'cpgm/map', {
-			title: 'CP Google Maps',
+			title: 'CodePeople Post Map for Google Maps',
 			icon: iconCPGM,
 			category: 'cpgm',
 			supports: {

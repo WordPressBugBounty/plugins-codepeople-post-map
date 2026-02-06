@@ -1,94 +1,66 @@
-=== Google Maps CP ===
+=== CodePeople Post Map for Google Maps ===
 Contributors: codepeople
 Donate link: http://wordpress.dwbooster.com/content-tools/codepeople-post-map
-Tags:google maps,maps,marker,places,shape,cluster
+Tags:google maps,maps,marker,places,routes
 Requires at least: 3.0.5
-Tested up to: 6.8
-Stable tag: 1.2.4
+Tested up to: 6.9
+Stable tag: 1.2.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Google Maps CP allows to associate geolocation information to your posts and to integrate your blog with Google Maps in an easy and natural way.
+CodePeople Post Map lets you geotag posts and seamlessly integrate your blog with Google Maps for a smooth, location-aware experience.
 
 == Description ==
 
-Google Map features:
+**CodePeople Post Map for Google Maps** lets you insert Google Maps into posts or WordPress templates displaying multiple posts. In single posts, it shows a marker for the post’s geolocation and optionally markers for recent posts in related categories. In templates, it displays markers for all posts on the page, highlighting the related post on hover.
 
-► Insert a Google map in the best position within your blog
-► Deal with large volumes of dots or markers on the Google Maps
-► Uses Google Maps to discover additional entries related to the post
-► The location can be defined by physical address and point coordinates
-► Map markers customization
-► Allows to embed Google Maps in multiple languages
-► Allows several Google Maps controls and configuration options
+**Main Features:**
 
-**Google Maps CP** allows to insert a Google Maps in a post or in any of the WordPress templates that display multiple posts.
+► Insert Google Maps at optimal positions or associate geolocation without displaying the map
+► Handle large volumes of markers
+► Discover related entries via map markers
+► Define location by address or coordinates
+► Customize markers and info bubbles (including default-open bubbles)
+► Embed maps in multiple languages
+► Based on Google Maps JavaScript API v3
+► Show markers for posts in the same category
+► Customize zoom, size, margins, alignment, map type/language, display mode (full or icon), controls, number of points, and hover class
+► Style the map freely
 
-The Google Maps inserted in a single post displays a marker at the position indicated by the geolocation information pertaining to the post, but also shows markers of the last posts published in related categories. The number of markers to display on the Google Maps can be set in the plugin's settings.
+**Premium Features:**
 
-The Google Maps inserted into a template displaying multiple posts will contain as many markers as posts making up the page with the associated geolocation info. When the mouse is hovered over the marker, the post to which it belongs gets highlighted.
+*   Load points from specific posts, categories, tags, or all posts
+*   Use location info and descriptions in post search
+*   Associate multiple points per post/page
+*   Draw routes and shapes
+*   Add a search box for places
+*   Create legends with categories/tags/taxonomies to toggle visibility
+*   Add links for directions, opening in Google Maps, or Street View
+*   Display multiple maps per post/page (same points across maps)
+*   Insert maps as sidebar widgets
+*   Group markers in clusters
+*   Show and refresh user location at intervals
+*   Generate dynamic points from image metadata or WordPress App geolocation
+*   Associate maps with any public post_type
+*   In non-singular pages, show a map per post
+*   Export/import points via CSV or KML
+*   Load KML layers from files
 
-**Google Maps** has a wide range of settings to make your maps more versatile and adaptable.
+**Developer Features (includes Premium):**
 
-**More about the Main Features of Google Maps CP:**
+*   Design contact forms linked to map points
+*   Send notification emails from form submissions
+*   Assign unique or global email addresses to points
+*   Support Contact Form 7 shortcodes in point descriptions
+*   Use point-associated images as map icons
 
-*   The plugin is capable of dealing with **large volumes of dots or markers**.
-*   Another way for users to discover **additional entries related** to the post.
-*   The **location information** can be defined by physical address and point coordinates.
-*   Allows to **insert the Google Maps** in the best position within your blog or simply **associate the geolocation information** to the post but without displaying the Google maps.
-*   Markers **customization**.
-*   Display or hide the bubbles with markers information.
-*   Allows to display a bubble opened by default.
-*   Based on **Google Maps Javascript API Version 3**.
-*   Allows to embed Google maps in **multiple languages**.
-*   Displays **markers** belonging to posts of the same categories.
-*   **Several customization options** are available: initial zoom, width, height, margins, alignment, map type, map language, the way the map is displayed in a single post (either fully deployed or icon to display the Google maps), enable or disable map controls, the number of points plotted on a Google map, as well as the class that will be assigned to the post when the mouse hovers over the marker associated with the post.
-*   Allows to styling the map.
-
-**Premium Features of Google Maps CP:**
-
-*   Load points belonging to specific pages or posts.
-*   Load in a same map all points that belong to a specific category.
-*   Load in a same map the points associated to all posts.
-*   Display the points that belong to the posts with a specific tag.
-*   The location information and description may be used in posts search.
-*   Allows to associate multiple Google maps points to each post/page.
-*   Allows to draw routes through points in the same post.
-*   Include a search box on the map for searching additional places.
-*   Draw shapes on the Google Maps.
-*   Allows to create a legend with categories, tags, or custom taxonomies, and display or hide the points, checking or unchecking legend items.
-*   Include a link to get directions to the point from Google Maps.
-*   Include a link to open the point directly on Google Maps.
-*   Include a link to display directly the street view in the specific point.
-*   Allows to display multiple Google Maps in the same post/page (but displays the same points in all maps on page).
-*   Allows to insert the map as widget on sidebars.
-*   Allows grouping multiple markers in a cluster.
-*   Allows to display the user location on map.
-*   Allows to refresh the user location on map in the time interval defined in the map's settings.
-*	Generates dynamic points from the geolocation information, stored in the image's metadata when it is uploaded to WordPress, and includes a button for processing all previous images.
-*	Generates dynamic points on map, relative to the geolocation information, assigned to the posts from WordPress App.
-*   Allows to associate the Google maps with any public post_type in WordPress.
-*   In non singular webpages, Google Maps display a map for each post.
-*   Allows to export all points defined in the website to a CSV file.
-*   Allows to import the points from a CSV or KML file.
-*   Allows to load a KML layer on the map from a KML file.
-
-The third, and most extended version of the plugin is the "Developer Version". The Developer version of the Google Maps CP plugin includes all features of the Premium version, and the features listed below:
-
-**Developer Features of Google Maps CP**
-
-*   Allows design a Contact Form, and associate it with the points in the map.
-*   Send notification emails with the information collected by the form.
-*   Associate an email address to the points, to contact a different person by each point, or a global email address to be notified from all points.
-*   Supports Contact Form 7 plugin's forms in the points' descriptions by inserting their shortcodes ( [contact-form-7 id="1" title="Contact Form" label="Click Here"] )
-*   Allows to use the image associated with the point as the point's icon on map.
-
-**Demo of the Developer Version of Google Maps CP Plugin**
+**Demo Access:**
 
 [https://demos.dwbooster.com/cp-google-maps/wp-login.php](https://demos.dwbooster.com/cp-google-maps/wp-login.php "Click to access the administration area demo")
 
 [https://demos.dwbooster.com/cp-google-maps/](https://demos.dwbooster.com/cp-google-maps/ "Click to access the Public Page")
 
+== Shorcode Attributes and Plugin Settings ==
 
 Note 1: To display all points that belong to a specific category in the same Google Map, it is required to insert the following shortcode `[codepeople-post-map cat="3"]`. The number 3 represent the category ID, replace this number by the corresponding category's ID. To insert the code directly in a template, the snippet of code would be:
 
@@ -266,11 +238,11 @@ kml: Absolute URL (http://...) to a KML file with the Keyhole Markup Language:
 
 If you want more information about this plugin or another one don't doubt to visit my website:
 
-[http://wordpress.dwbooster.com/content-tools/codepeople-post-map](http://wordpress.dwbooster.com/content-tools/codepeople-post-map "Google Maps CP")
+[http://wordpress.dwbooster.com/content-tools/codepeople-post-map](http://wordpress.dwbooster.com/content-tools/codepeople-post-map "CodePeople Post Map for Google Maps")
 
 == Installation ==
 
-**To install Google Maps CP, follow these steps:**
+**To install CodePeople Post Map for Google Maps, follow these steps:**
 
 1.	Download and unzip the plugin
 2.	Upload the entire codepeople-post-map/ directory to the /wp-content/plugins/ directory
@@ -342,13 +314,13 @@ The settings are divided into two main groups, those belonging to the Google map
 
 **Inserting maps as widgets on sidebars** (available only in the premium and developer versions of plugin)
 
-To insert the maps as widget on sidebars, go to the menu option "Appearance / Widgets", and drag the "CP Google Maps" widget to the sidebar.
+To insert the maps as widget on sidebars, go to the menu option "Appearance / Widgets", and drag the "CodePeople Post Map for Google Maps" widget to the sidebar.
 
 It is possible define, for each map on sidebar, all attributes available with the format attr="value". The map's width is set to the 100% of sidebar by default.
 
 **Translations**
 
-The Google Maps CP uses the English language by default, but includes the following language packages:
+The CodePeople Post Map for Google Maps uses the English language by default, but includes the following language packages:
 
 * Spanish
 * French
@@ -494,7 +466,7 @@ A: If you want to display a link to open the point directly on Google Maps, go t
 
 = Q: Could I insert the map as widget? =
 
-A: Yes, you can. Go to the menu option: "Appearance / Widgets" and insert the "CP Google Maps" widget on side bar.
+A: Yes, you can. Go to the menu option: "Appearance / Widgets" and insert the "CodePeople Post Map for Google Maps" widget on side bar.
 
 = Q: My images include geolocation information. Is possible use the geolocaion information stored in the image to generate points on map? =
 
@@ -613,6 +585,10 @@ Now the most important part create the shape's area. To create the shape's area 
 11. Export/Import section (only available in the Developer version of the plugin)
 
 == Changelog ==
+
+= 1.2.5 =
+
+* Modifies the plugin name and references to meet WordPress directory requirements.
 
 = 1.2.4 =
 

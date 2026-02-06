@@ -1,13 +1,13 @@
 <?php
 /*
-Plugin Name: Google Maps CP
+Plugin Name: CodePeople Post Map for Google Maps
 Text Domain: codepeople-post-map
-Version: 1.2.4
+Version: 1.2.5
 Author: CodePeople
 Author URI: http://wordpress.dwbooster.com/content-tools/codepeople-post-map
 Plugin URI: http://wordpress.dwbooster.com/content-tools/codepeople-post-map
 Text Domain: codepeople-post-map
-Description: Google Maps CP Allows to associate geocode information to posts and display it on map. Google Maps CP display the post list as markers on map. The scale of map is determined by the markers, to display distant points is required to load a map with smaller scales. To get started: 1) Click the "Activate" link to the left of this description. 2) Go to your <a href="options-general.php?page=codepeople-post-map.php">Google Maps CP configuration</a> page and configure the maps settings. 3) Go to post edition page to enter the geolocation information.
+Description: CodePeople Post Map for Google Maps Allows to associate geocode information to posts and display it on map. CodePeople Post Map for Google Maps display the post list as markers on map. The scale of map is determined by the markers, to display distant points is required to load a map with smaller scales. To get started: 1) Click the "Activate" link to the left of this description. 2) Go to your <a href="options-general.php?page=codepeople-post-map.php">CodePeople Post Map for Google Maps configuration</a> page and configure the maps settings. 3) Go to post edition page to enter the geolocation information.
  */
 
  // Feedback system
@@ -144,9 +144,9 @@ if (!function_exists("cpm_settings")) {
 
 			if (function_exists('add_options_page')) {
 				$slug = basename(__FILE__);
-				add_options_page('Google Maps CP', 'Google Maps CP', 'manage_options', $slug, array(&$cpm_master_obj, 'settings_page'));
+				add_options_page('CodePeople Post Map for Google Maps', 'CodePeople Post Map for Google Maps', 'manage_options', $slug, array(&$cpm_master_obj, 'settings_page'));
 
-				add_menu_page( 'Google Maps CP', 'Google Maps CP', 'manage_options', $slug, array(&$cpm_master_obj, 'settings_page'), 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiBmaWxsPSJjdXJyZW50Q29sb3IiPg0KICA8cGF0aCBkPSJNMTIgMmMzLjE5NiAwIDYgMi42MTggNiA1LjYwMiAwIDMuMDkzLTIuNDkzIDcuMTMyLTYgMTIuNTkxLTMuNTA3LTUuNDU5LTYtOS40OTgtNi0xMi41OTFDNiA0LjYxOCA4LjgwNCAyIDEyIDJ6bTAgNGEyIDIgMCAxIDAgMCA0IDIgMiAwIDAgMCAwLTR6Ii8+DQo8L3N2Zz4=' );
+				add_menu_page( 'CodePeople Post Map for Google Maps', 'CodePeople Post Map for Google Maps', 'manage_options', $slug, array(&$cpm_master_obj, 'settings_page'), 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiBmaWxsPSJjdXJyZW50Q29sb3IiPg0KICA8cGF0aCBkPSJNMTIgMmMzLjE5NiAwIDYgMi42MTggNiA1LjYwMiAwIDMuMDkzLTIuNDkzIDcuMTMyLTYgMTIuNTkxLTMuNTA3LTUuNDU5LTYtOS40OTgtNi0xMi41OTFDNiA0LjYxOCA4LjgwNCAyIDEyIDJ6bTAgNGEyIDIgMCAxIDAgMCA0IDIgMiAwIDAgMCAwLTR6Ii8+DQo8L3N2Zz4=' );
 
 				add_submenu_page( $slug, 'Online Help', 'Online Help', 'read', 'google_maps_cp_help', array(&$cpm_master_obj, 'settings_page') );
 
