@@ -3,8 +3,8 @@ Contributors: codepeople
 Donate link: http://wordpress.dwbooster.com/content-tools/codepeople-post-map
 Tags:google maps,maps,marker,places,routes
 Requires at least: 3.0.5
-Tested up to: 6.9
-Stable tag: 1.2.5
+Tested up to: 7.0
+Stable tag: 1.2.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -585,6 +585,10 @@ Now the most important part create the shape's area. To create the shape's area 
 11. Export/Import section (only available in the Developer version of the plugin)
 
 == Changelog ==
+
+= 1.2.6 =
+
+* Enhances the plugin security. Thanks to dutafi (Patchstack).
 
 = 1.2.5 =
 

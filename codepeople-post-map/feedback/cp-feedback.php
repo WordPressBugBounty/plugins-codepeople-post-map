@@ -69,25 +69,30 @@ if(!class_exists('CP_FEEDBACK'))
 					'phpversion' 	=> phpversion()
 				);
 
-				foreach($_POST as $parameter => $value)
+				$allowed = array('feedback_message', 'feedback_rating', 'feedback_plugin');
+				foreach($allowed as $parameter)
 				{
-					$data[$parameter] = $value;
+					if(isset($_POST[$parameter]))
+					{
+						$data[$parameter] = sanitize_text_field(wp_unslash($_POST[$parameter]));
+					}
 				}
 
 				if(!isset($_POST["cp_feedback_anonymous"])) // send this data only if explicitly accepted
 				{
 					$current_user = wp_get_current_user();
-					$data['email'] = $current_user->user_email;
-					$data['website'] = $_SERVER['HTTP_HOST'];
-					$data['url'] = get_site_url();
+					$data['email']    = $current_user->user_email;
+					$data['website']  = wp_parse_url(home_url(), PHP_URL_HOST);
+					$data['url']      = home_url();
 				}
 
 				// Send data
 				$response = wp_remote_post(
 					$this->feedback_url,
 					array(
-						'body' => $data,
-						'sslverify' => false
+						'body'       => $data,
+						'sslverify'  => false,
+						'timeout'    => 15,
 					)
 				);
 

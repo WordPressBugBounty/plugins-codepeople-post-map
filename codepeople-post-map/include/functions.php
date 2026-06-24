@@ -129,9 +129,9 @@ class CPM {
 		delete_post_meta($post_id,'cpm_point');
 		delete_post_meta($post_id,'cpm_map');
 
-		$new_cpm_point = ( isset( $_POST['cpm_point'] ) ) ? $_POST['cpm_point'] : array();
+		$new_cpm_point = ( isset( $_POST['cpm_point'] ) && is_array( $_POST['cpm_point'] ) ) ? $_POST['cpm_point'] : array();
 		$new_cpm_point = $this->array_map_recursive(array($this, 'sanitize_html'), $new_cpm_point);
-		$new_cpm_map = ( isset( $_POST['cpm_map'] ) ) ? $_POST['cpm_map'] : array();
+		$new_cpm_map = ( isset( $_POST['cpm_map'] ) && is_array( $_POST['cpm_map'] ) ) ? $_POST['cpm_map'] : array();
 		$new_cpm_map = $this->array_map_recursive('sanitize_text_field', $new_cpm_map);
 
 		$new_cpm_point['icon'] = str_replace( CPM_PLUGIN_URL, '', $default_icon );
@@ -879,8 +879,12 @@ class CPM {
 		global $post, $wpdb;
 
 		$cpm_point = get_post_meta($post->ID, 'cpm_point', TRUE);
-		if(is_string($cpm_point)) $cpm_point = @unserialize($cpm_point);
-		if($cpm_point === false)  $cpm_point = array();
+		if(is_string($cpm_point) && preg_match('/^a:\d+:\{/', $cpm_point)){
+			$tmp = @unserialize($cpm_point, array('allowed_classes' => false));
+			$cpm_point = ( is_array($tmp) ) ? $tmp : array();
+		}elseif(!is_array($cpm_point)){
+			$cpm_point = array();
+		}
 
 		$cpm_map = get_post_meta($post->ID, 'cpm_map', TRUE);
 		$general_options = $this->get_configuration_option();
@@ -1141,10 +1145,10 @@ class CPM {
 
         $point = get_post_meta($post_id, 'cpm_point', TRUE);
 		if(!empty($point)){
-			if(is_string($point))
+			if(is_string($point) && preg_match('/^a:\d+:\{/', $point))
 			{
-				$tmp_point = @unserialize($point);
-				if($tmp_point !== false)  $point = $tmp_point;
+				$tmp_point = @unserialize($point, array('allowed_classes' => false));
+				$point = ( is_array($tmp_point) ) ? $tmp_point : array( 'address' => $point );
 			}
 
 			if( !is_array( $point ) )
@@ -1367,8 +1371,7 @@ class CPM {
 			)
 			{
 				// Sanitizing variable
-				$preview = stripcslashes($_REQUEST['cpm-preview']);
-				$preview = strip_tags($preview);
+				$preview = sanitize_text_field(wp_unslash($_REQUEST['cpm-preview']));
 
 				// Remove every shortcode that is not in the music store list
 				remove_all_shortcodes();
@@ -1426,7 +1429,7 @@ class CPM {
 	 */
 	function _set_map_tag($atts){
 		$atts = array_merge($atts, $this->extended);
-        extract($atts);
+        extract($atts, EXTR_SKIP);
 
 		if(isset($width))
 		{
@@ -1469,7 +1472,7 @@ class CPM {
 	function _set_map_config($atts){
         $atts = array_merge($atts, $this->extended);
 
-		extract($atts);
+		extract($atts, EXTR_SKIP);
 
 		if(!isset($display)) $display = 'map';
 		if(!isset($type)) $type = 'ROADMAP';
@@ -1490,23 +1493,32 @@ class CPM {
 		$output .= "cpm_global['$this->map_id']['zoom'] = ".((!empty($zoom)) ? @intval($zoom) : $this->_default_configuration('zoom')).";\n";
 		$output .= "cpm_global['$this->map_id']['dynamic_zoom'] = ".((isset($dynamic_zoom) && $dynamic_zoom) ? 'true' : 'false').";\n";
 		$output .= "cpm_global['$this->map_id']['markers'] = new Array();\n";
-		$output .= "cpm_global['$this->map_id']['display'] = '$display';\n";
+		$output .= "cpm_global['$this->map_id']['display'] = '".esc_js( $display )."';\n";
         $output .= "cpm_global['$this->map_id']['drag_map'] = ".( ( !isset( $drag_map ) || $drag_map ) ? 'true' : 'false' ).";\n";
-		$output .= "cpm_global['$this->map_id']['highlight_class'] = '".$this->get_configuration_option('highlight_class')."';\n";
+		$output .= "cpm_global['$this->map_id']['highlight_class'] = '".esc_js($this->get_configuration_option('highlight_class'))."';\n";
 
 		if(isset($tooltip))
 			$output .= "cpm_global['$this->map_id']['marker_title'] = '".esc_js($tooltip)."';\n";
 
 		$highlight = $this->get_configuration_option('highlight');
 		$output .= "cpm_global['$this->map_id']['highlight'] = ".(($highlight && !is_singular()) ? 'true' : 'false').";\n";
-		$output .= "cpm_global['$this->map_id']['type'] = '$type';\n";
+		$output .= "cpm_global['$this->map_id']['type'] = '".esc_js( $type )."';\n";
         $output .= "cpm_global['$this->map_id']['show_window'] = ".((isset($show_window) && $show_window) ? 'true' : 'false').";\n";
 		$output .= "cpm_global['$this->map_id']['show_default'] = ".((isset($show_default) && $show_default) ? 'true' : 'false').";\n";
 
 		// Set maps centre
 		if( !empty( $center ) )
 		{
-			$output .= "cpm_global['$this->map_id']['center'] = [".trim( $center )."];\n";
+			$coords = preg_split('/\s*,\s*/', trim($center), 2, PREG_SPLIT_NO_EMPTY);
+			if(
+				count($coords) === 2 &&
+				is_numeric($coords[0]) &&
+				is_numeric($coords[1])
+			){
+				$output .= "cpm_global['$this->map_id']['center'] = ["
+				         . floatval($coords[0]) . "," . floatval($coords[1])
+				         . "];\n";
+			}
 		}
 
 		// Define controls
@@ -1534,12 +1546,12 @@ class CPM {
 		$icon = (!empty($point['icon'])) ? $point['icon'] : $this->get_configuration_option('default_icon');
 		if( preg_match( '/http(s)?:\/\//i', $icon ) == 0 ) $icon = CPM_PLUGIN_URL.$icon;
         $obj = new stdClass;
-        $obj->address = str_replace(array('&quot;', '&lt;', '&gt;', '&#039;', '&amp;'), array('\"', '<', '>', "'", '&'), ( ( empty( $point['address'] ) ) ? '' : $point['address'] ) );
+        $obj->address = wp_kses_post(str_replace(array('&quot;', '&lt;', '&gt;', '&#039;', '&amp;'), array('\"', '<', '>', "'", '&'), ( ( empty( $point['address'] ) ) ? '' : $point['address'] ) ));
 
 		if(!empty($point['latitude']) )	$obj->lat = $point['latitude'];
 		if(!empty($point['longitude']) )$obj->lng = $point['longitude'];
 
-        $obj->info = str_replace(array('&quot;', '&lt;', '&gt;', '&#039;', '&amp;'), array('\"', '<', '>', "'", '&'), $this->_get_windowhtml($point));
+        $obj->info = wp_kses_post(str_replace(array('&quot;', '&lt;', '&gt;', '&#039;', '&amp;'), array('\"', '<', '>', "'", '&'), $this->_get_windowhtml($point)));
 
         $obj->icon = $icon;
         $obj->post = $point['post_id'];
@@ -1592,7 +1604,7 @@ class CPM {
 		$point_address = apply_filters('cpm-point-address', isset( $point['address'] ) ? $point['address'] : '', $point['post_id']);
 
 		if( !empty( $point_img_url ) ) {
-			$point_img = "<img src='".$point_img_url."' class='cpm-thumbnail' style='margin:8px 0 0 8px !important; width:90px; height:90px' align='right' />";
+			$point_img = "<img src='".esc_url($point_img_url)."' class='cpm-thumbnail' style='margin:8px 0 0 8px !important; width:90px; height:90px' align='right' />";
 			$html_width = "310px";
 		} else {
 			$point_img = "";
@@ -1600,7 +1612,7 @@ class CPM {
 		}
 
 		$find = array("%title%","%link%","%thumbnail%", "%excerpt%","%description%","%address%","%width%","\r\n","\f","\v","\t","\r","\n","\\","\"");
-		$replace  = array($point_title,$point_link,$point_img,"",do_shortcode($point_description),$point_address,$html_width,"","","","","","","","'");
+		$replace  = array(esc_html($point_title),esc_url($point_link),$point_img,"",wp_kses_post(do_shortcode($point_description)),esc_html($point_address),$html_width,"","","","","","","","'");
 
 		$windowhtml = str_replace( $find, $replace, $windowhtml_frame);
 
