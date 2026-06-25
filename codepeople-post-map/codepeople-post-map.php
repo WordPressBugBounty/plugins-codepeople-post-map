@@ -2,7 +2,7 @@
 /*
 Plugin Name: CodePeople Post Map for Google Maps
 Text Domain: codepeople-post-map
-Version: 1.2.7
+Version: 1.2.8
 Author: CodePeople
 Author URI: http://wordpress.dwbooster.com/content-tools/codepeople-post-map
 Plugin URI: http://wordpress.dwbooster.com/content-tools/codepeople-post-map
@@ -80,6 +80,10 @@ function cpm_init(){
 	load_plugin_textdomain( 'codepeople-post-map', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 	global $cpm_master_obj, $cpm_objs;
 	$cpm_master_obj = new CPM;
+	add_action('admin_enqueue_scripts', array($cpm_master_obj, 'load_admin_resources'), 1);
+	add_action('enqueue_block_editor_assets', array($cpm_master_obj, 'load_gutenberg_code'));
+	add_action('wp_head', array($cpm_master_obj, 'load_header_resources'), 10);
+
     $cpm_objs = array();
 
 	if(!is_admin())
@@ -157,9 +161,6 @@ if (!function_exists("cpm_settings")) {
 		}
 	}
 
-add_action('admin_enqueue_scripts', array(&$cpm_master_obj, 'load_admin_resources'), 1);
-add_action('enqueue_block_editor_assets', array(&$cpm_master_obj, 'load_gutenberg_code'));
-add_action('wp_head', array(&$cpm_master_obj, 'load_header_resources'), 10);
 add_action('admin_menu', 'cpm_settings');
 
 ?>
