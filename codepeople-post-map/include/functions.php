@@ -96,12 +96,18 @@ class CPM {
         return $array;
     }
 
-	function sanitize_html( $v )
+	function sanitize_coord( $v )
 	{
-		$allowed_tags = wp_kses_allowed_html( 'post' );
-		$v = wp_kses($v, $allowed_tags);
-		return $v;
-	} // End sanitize
+		if ( ! is_string( $v ) && ! is_numeric( $v ) ) return '';
+		$v = trim( (string) $v );
+		return preg_match( '/^-?\d{1,3}(\.\d+)?$/', $v ) ? $v : '';
+	} // End sanitize_coord
+
+	function sanitize_description( $v )
+	{
+		if ( ! is_string( $v ) ) return '';
+		return wp_kses_post( $v );
+	} // End sanitize_description
 
 	//---------- CREATE MAP ----------
 
@@ -117,33 +123,48 @@ class CPM {
 
 		// check user permissions
 		if (isset($_POST['post_type'] ) && $_POST['post_type'] == 'page'){
-			if (!current_user_can('edit_page', $post_id)) return $post_id;
+			if (!current_user_can('publish_pages')) return $post_id;
 		}
 		else{
-			if (!current_user_can('edit_post', $post_id)) return $post_id;
+			if (!current_user_can('publish_posts')) return $post_id;
 		}
 
 		// authentication passed, save data
-		$default_icon = ( !empty( $_POST['default_icon'] ) ) ? sanitize_text_field($_POST['default_icon']) : $this->get_configuration_option('default_icon');
+		$default_icon = ( !empty( $_POST['default_icon'] ) ) ? sanitize_text_field( wp_unslash( $_POST['default_icon'] ) ) : $this->get_configuration_option('default_icon');
 
 		delete_post_meta($post_id,'cpm_point');
 		delete_post_meta($post_id,'cpm_map');
 
-		$new_cpm_point = ( isset( $_POST['cpm_point'] ) && is_array( $_POST['cpm_point'] ) ) ? $_POST['cpm_point'] : array();
-		$new_cpm_point = $this->array_map_recursive(array($this, 'sanitize_html'), $new_cpm_point);
-		$new_cpm_map = ( isset( $_POST['cpm_map'] ) && is_array( $_POST['cpm_map'] ) ) ? $_POST['cpm_map'] : array();
+		$new_cpm_point = ( isset( $_POST['cpm_point'] ) && is_array( $_POST['cpm_point'] ) ) ? wp_unslash( $_POST['cpm_point'] ) : array();
+		$new_cpm_map = ( isset( $_POST['cpm_map'] ) && is_array( $_POST['cpm_map'] ) ) ? wp_unslash( $_POST['cpm_map'] ) : array();
 		$new_cpm_map = $this->array_map_recursive('sanitize_text_field', $new_cpm_map);
+
+		// Per-field sanitization (storage layer hardening).
+		// Runs unconditionally - never gated by $new_cpm_map['single'].
+		$new_cpm_point['address']     = isset( $new_cpm_point['address'] )
+			? sanitize_text_field( $new_cpm_point['address'] )
+			: '';
+		$new_cpm_point['name']        = isset( $new_cpm_point['name'] )
+			? sanitize_text_field( $new_cpm_point['name'] )
+			: '';
+		$new_cpm_point['description'] = isset( $new_cpm_point['description'] )
+			? $this->sanitize_description( $new_cpm_point['description'] )
+			: '';
+		$new_cpm_point['latitude']    = isset( $new_cpm_point['latitude'] )
+			? $this->sanitize_coord( $new_cpm_point['latitude'] )
+			: '';
+		$new_cpm_point['longitude']   = isset( $new_cpm_point['longitude'] )
+			? $this->sanitize_coord( $new_cpm_point['longitude'] )
+			: '';
+		$new_cpm_point['thumbnail']   = isset( $new_cpm_point['thumbnail'] )
+			? esc_url_raw( $new_cpm_point['thumbnail'], array( 'http', 'https' ) )
+			: '';
 
 		$new_cpm_point['icon'] = str_replace( CPM_PLUGIN_URL, '', $default_icon );
 
         // Set the map's config
         $new_cpm_map['single'] = (isset($new_cpm_map['single'])) ? true : false;
         if($new_cpm_map['single']){
-            $new_cpm_point['address'] = esc_attr( ( !empty( $new_cpm_point['address'] ) ) ? $new_cpm_point['address'] : '' );
-            $new_cpm_point['name'] = esc_attr( ( !empty( $new_cpm_point['name'] ) ) ? $new_cpm_point['name'] : '' );
-			$new_cpm_point['description'] = ( !empty( $new_cpm_point['description'] ) ) ? $new_cpm_point['description'] : '';
-
-
             $new_cpm_map['zoompancontrol'] 	= (! empty( $new_cpm_map['zoompancontrol'] ) && $new_cpm_map['zoompancontrol'] == true);
             $new_cpm_map['fullscreencontrol'] 	= (! empty( $new_cpm_map['fullscreencontrol'] ) && $new_cpm_map['fullscreencontrol'] == true);
             $new_cpm_map['mousewheel'] 		= (! empty( $new_cpm_map['mousewheel'] ) && $new_cpm_map['mousewheel'] == true);
@@ -702,21 +723,21 @@ class CPM {
 		echo '<input type="hidden" name="cpm_map_noncename" value="' . wp_create_nonce(__FILE__) . '" />';
 	?>
 		<script>
-			var cpm_default_marker = "<?php echo $default_configuration['default_icon']; ?>";
+			var cpm_default_marker = <?php echo wp_json_encode( $default_configuration['default_icon'] ); ?>;
 			var cpm_point = {};
 
 			<?php
 			if(!empty($options['address']) || (!empty($options['latitude']) && !empty($options['longitude']))){
-				if(!empty($options['address'])) echo 'cpm_point["address"]="'.$options['address'].'";';
+				if(!empty($options['address']))   echo 'cpm_point["address"]='   . wp_json_encode( $options['address'] )   . ';';
 				if(!empty($options['latitude']) && !empty($options['longitude'])){
-					echo 'cpm_point["latitude"]="'.$options['latitude'].'";';
-					echo 'cpm_point["longitude"]="'.$options['longitude'].'";';
+					echo 'cpm_point["latitude"]='  . wp_json_encode( $options['latitude'] )  . ';';
+					echo 'cpm_point["longitude"]=' . wp_json_encode( $options['longitude'] ) . ';';
 				}
 
 			} else {
-				echo 'cpm_point["address"]="Statue of Liberty, Statue of Liberty National Monument, Statue Of Liberty, New York, NY 10004, USA";';
-				echo 'cpm_point["latitude"]="40.689848";';
-				echo 'cpm_point["longitude"]="-74.044869";';
+				echo 'cpm_point["address"]='   . wp_json_encode( 'Statue of Liberty, Statue of Liberty National Monument, Statue Of Liberty, New York, NY 10004, USA' ) . ';';
+				echo 'cpm_point["latitude"]='  . wp_json_encode( '40.689848' )  . ';';
+				echo 'cpm_point["longitude"]=' . wp_json_encode( '-74.044869' ) . ';';
 			}
 			?>
 
@@ -1218,7 +1239,8 @@ class CPM {
         }
         if(strlen($str))
         {
-            $str = "<script>if(typeof cpm_global != 'undefined' && typeof cpm_global['".$this->map_id."'] != 'undefined' && typeof cpm_global['".$this->map_id."']['markers'] != 'undefined'){ ".$str." }</script>";
+            $map_id_json = wp_json_encode( $this->map_id );
+            $str = '<script>if(typeof cpm_global != \'undefined\' && typeof cpm_global[' . $map_id_json . '] != \'undefined\' && typeof cpm_global[' . $map_id_json . '][\'markers\'] != \'undefined\'){ ' . $str . ' }</script>';
         }
 
         $this->points = array();
@@ -1445,7 +1467,7 @@ class CPM {
 		}
 		else $height = '500px';
 
-		$output ='<div id="'.$this->map_id.'" data-mapid="' . esc_attr( ! empty( $atts['mapid'] ) ? $atts['mapid'] : '' ). '" class="cpm-map" style="display:none; width:'.esc_attr($width).'; height:'.esc_attr($height).'; ';
+		$output ='<div id="' . esc_attr( $this->map_id ) . '" data-mapid="' . esc_attr( ! empty( $atts['mapid'] ) ? $atts['mapid'] : '' ). '" class="cpm-map" style="display:none; width:'.esc_attr($width).'; height:'.esc_attr($height).'; ';
 
 		if(!isset($align)) $align = 'center';
 		if(!isset($margin)) $margin = 0;
@@ -1478,33 +1500,34 @@ class CPM {
 		if(!isset($type)) $type = 'ROADMAP';
 
 		$default_language = $this->get_configuration_option('language');
+		$map_id_json = wp_json_encode( $this->map_id );
 		$output  = "<script type=\"text/javascript\">\n";
 
 		if(isset($language))
-			$output  .= 'var cpm_language = {"lng":"'.esc_js($language).'"};';
+			$output  .= 'var cpm_language = {"lng":' . wp_json_encode( $language ) . '};';
 		elseif(isset($default_language))
-			$output  .= 'var cpm_language = {"lng":"'.esc_js($default_language).'"};';
+			$output  .= 'var cpm_language = {"lng":' . wp_json_encode( $default_language ) . '};';
 
 		$api_key = $this->get_configuration_option( 'api_key' );
-		$output .= "var cpm_api_key = '".esc_js((!empty( $api_key ))?trim($api_key) :'')."';\n";
+		$output .= 'var cpm_api_key = ' . wp_json_encode( (!empty( $api_key )) ? trim($api_key) : '' ) . ";\n";
 
 		$output .= "var cpm_global = cpm_global || {};\n";
-		$output .= "cpm_global['$this->map_id'] = {}; \n";
-		$output .= "cpm_global['$this->map_id']['zoom'] = ".((!empty($zoom)) ? @intval($zoom) : $this->_default_configuration('zoom')).";\n";
-		$output .= "cpm_global['$this->map_id']['dynamic_zoom'] = ".((isset($dynamic_zoom) && $dynamic_zoom) ? 'true' : 'false').";\n";
-		$output .= "cpm_global['$this->map_id']['markers'] = new Array();\n";
-		$output .= "cpm_global['$this->map_id']['display'] = '".esc_js( $display )."';\n";
-        $output .= "cpm_global['$this->map_id']['drag_map'] = ".( ( !isset( $drag_map ) || $drag_map ) ? 'true' : 'false' ).";\n";
-		$output .= "cpm_global['$this->map_id']['highlight_class'] = '".esc_js($this->get_configuration_option('highlight_class'))."';\n";
+		$output .= "cpm_global[" . $map_id_json . "] = {}; \n";
+		$output .= "cpm_global[" . $map_id_json . "]['zoom'] = ".((!empty($zoom)) ? @intval($zoom) : $this->_default_configuration('zoom')).";\n";
+		$output .= "cpm_global[" . $map_id_json . "]['dynamic_zoom'] = ".((isset($dynamic_zoom) && $dynamic_zoom) ? 'true' : 'false').";\n";
+		$output .= "cpm_global[" . $map_id_json . "]['markers'] = new Array();\n";
+		$output .= "cpm_global[" . $map_id_json . "]['display'] = " . wp_json_encode( $display ) . ";\n";
+        $output .= "cpm_global[" . $map_id_json . "]['drag_map'] = ".( ( !isset( $drag_map ) || $drag_map ) ? 'true' : 'false' ).";\n";
+		$output .= "cpm_global[" . $map_id_json . "]['highlight_class'] = " . wp_json_encode( $this->get_configuration_option('highlight_class') ) . "\n";
 
 		if(isset($tooltip))
-			$output .= "cpm_global['$this->map_id']['marker_title'] = '".esc_js($tooltip)."';\n";
+			$output .= "cpm_global[" . $map_id_json . "]['marker_title'] = " . wp_json_encode( $tooltip ) . "\n";
 
 		$highlight = $this->get_configuration_option('highlight');
-		$output .= "cpm_global['$this->map_id']['highlight'] = ".(($highlight && !is_singular()) ? 'true' : 'false').";\n";
-		$output .= "cpm_global['$this->map_id']['type'] = '".esc_js( $type )."';\n";
-        $output .= "cpm_global['$this->map_id']['show_window'] = ".((isset($show_window) && $show_window) ? 'true' : 'false').";\n";
-		$output .= "cpm_global['$this->map_id']['show_default'] = ".((isset($show_default) && $show_default) ? 'true' : 'false').";\n";
+		$output .= "cpm_global[" . $map_id_json . "]['highlight'] = ".(($highlight && !is_singular()) ? 'true' : 'false').";\n";
+		$output .= "cpm_global[" . $map_id_json . "]['type'] = " . wp_json_encode( $type ) . "\n";
+        $output .= "cpm_global[" . $map_id_json . "]['show_window'] = ".((isset($show_window) && $show_window) ? 'true' : 'false').";\n";
+		$output .= "cpm_global[" . $map_id_json . "]['show_default'] = ".((isset($show_default) && $show_default) ? 'true' : 'false').";\n";
 
 		// Set maps centre
 		if( !empty( $center ) )
@@ -1515,19 +1538,19 @@ class CPM {
 				is_numeric($coords[0]) &&
 				is_numeric($coords[1])
 			){
-				$output .= "cpm_global['$this->map_id']['center'] = ["
+				$output .= "cpm_global[" . $map_id_json . "]['center'] = ["
 				         . floatval($coords[0]) . "," . floatval($coords[1])
 				         . "];\n";
 			}
 		}
 
 		// Define controls
-		$output .= "cpm_global['$this->map_id']['mousewheel'] = ".((isset($mousewheel) && $mousewheel) ? 'true' : 'false').";\n";
-		$output .= "cpm_global['$this->map_id']['zoompancontrol'] = ".((isset($zoompancontrol) && $zoompancontrol) ? 'true' : 'false').";\n";
-		$output .= "cpm_global['$this->map_id']['fullscreencontrol'] = ".((isset($fullscreencontrol) && $fullscreencontrol) ? 'true' : 'false').";\n";
-		$output .= "cpm_global['$this->map_id']['typecontrol'] = ".((isset($typecontrol) && $typecontrol) ? 'true' : 'false').";\n";
-		$output .= "cpm_global['$this->map_id']['streetviewcontrol'] = ".((isset($streetviewcontrol) && $streetviewcontrol) ? 'true' : 'false').";\n";
-		$output .= "cpm_global['$this->map_id']['trafficlayer'] = ".((isset($trafficlayer) && $trafficlayer) ? 'true' : 'false').";\n";
+		$output .= "cpm_global[" . $map_id_json . "]['mousewheel'] = ".((isset($mousewheel) && $mousewheel) ? 'true' : 'false').";\n";
+		$output .= "cpm_global[" . $map_id_json . "]['zoompancontrol'] = ".((isset($zoompancontrol) && $zoompancontrol) ? 'true' : 'false').";\n";
+		$output .= "cpm_global[" . $map_id_json . "]['fullscreencontrol'] = ".((isset($fullscreencontrol) && $fullscreencontrol) ? 'true' : 'false').";\n";
+		$output .= "cpm_global[" . $map_id_json . "]['typecontrol'] = ".((isset($typecontrol) && $typecontrol) ? 'true' : 'false').";\n";
+		$output .= "cpm_global[" . $map_id_json . "]['streetviewcontrol'] = ".((isset($streetviewcontrol) && $streetviewcontrol) ? 'true' : 'false').";\n";
+		$output .= "cpm_global[" . $map_id_json . "]['trafficlayer'] = ".((isset($trafficlayer) && $trafficlayer) ? 'true' : 'false').";\n";
 		$output .= "</script>";
 
 		return $output;
@@ -1556,7 +1579,7 @@ class CPM {
         $obj->icon = $icon;
         $obj->post = $point['post_id'];
         $obj->default = ( !empty( $point[ 'default' ] ) ) ? true : false;
-		return 'cpm_global["'.$this->map_id.'"]["markers"]['.$index.'] = '.json_encode( $obj ).';';
+		return 'cpm_global[' . wp_json_encode( $this->map_id ) . ']["markers"]['.$index.'] = '.wp_json_encode( $obj ).';';
     } // End _set_map_point
 
     function _get_img_id($url){
