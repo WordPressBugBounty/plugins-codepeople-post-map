@@ -952,7 +952,9 @@ class CPM {
 		if(!empty($post)) $url = get_preview_post_link($post->ID);
 		else $url = rtrim( get_home_url( get_current_blog_id() ), "/" ).( ( strpos( get_current_blog_id(), '?' ) === false ) ? "/" : "" );
 
-		$url .= ((strpos($url, '?') === false) ? '?' : '&').'cpm-preview=';
+		$nonce = !empty($post) ? wp_create_nonce('cpm-preview-'.$post->ID) : '';
+		$url .= ((strpos($url, '?') === false) ? '?' : '&') . 'cpm_preview_nonce=' . urlencode($nonce) .'&cpm-preview=';
+
 		$config = array('url' => $url);
 		wp_enqueue_script('cpm-gutenberg-editor', CPM_PLUGIN_URL.'/js/gutenberg.js');
 		wp_localize_script('cpm-gutenberg-editor', 'cpm_ge_config', $config);
@@ -1392,6 +1394,20 @@ class CPM {
 				($post_id = @intval($_REQUEST['post-id'])) !== 0
 			)
 			{
+				// Nonce verification
+				if (!isset($_REQUEST['cpm_preview_nonce']) ||
+				    !wp_verify_nonce(
+				        sanitize_text_field(wp_unslash($_REQUEST['cpm_preview_nonce'])),
+				        'cpm-preview-'.$post_id
+				    )) {
+				    return;
+				}
+
+				// Object-level capability check
+				if (!current_user_can('read_post', $post_id)) {
+				    return;
+				}
+
 				// Sanitizing variable
 				$preview = sanitize_text_field(wp_unslash($_REQUEST['cpm-preview']));
 

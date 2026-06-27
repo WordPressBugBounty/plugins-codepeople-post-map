@@ -2,7 +2,7 @@
 /*
 Plugin Name: CodePeople Post Map for Google Maps
 Text Domain: codepeople-post-map
-Version: 1.2.8
+Version: 1.2.9
 Author: CodePeople
 Author URI: http://wordpress.dwbooster.com/content-tools/codepeople-post-map
 Plugin URI: http://wordpress.dwbooster.com/content-tools/codepeople-post-map
